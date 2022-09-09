@@ -6,12 +6,20 @@ hash_list::hash_list(const hash_list &other)
 {
     size = 0;
     head = NULL;
+    elem = new int;
+    *elem = other.value();
 }
 
 hash_list &hash_list::operator=(const hash_list &other)
 {
     size = 0;
     head = NULL;
+    if(this == other){
+        return *this;
+    }
+    delete elem;
+    elem = new int;
+    *elem=other.value();
     return *this;
 }
 
@@ -171,3 +179,4 @@ std::optional<std::pair<int *, float *>> hash_list::get_iter_value() {}
 
 /** Dont modify this function for this lab. Leave it as is */
 bool hash_list::iter_at_end() {}
+
