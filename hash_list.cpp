@@ -1,13 +1,15 @@
 #include "hash_list.h"
 
 hash_list::hash_list() {}
+node* _insnode(int key, float value);
 
 hash_list::hash_list(const hash_list &other)
 {
     size = 0;
     head = NULL;
-    elem = new int;
-    *elem = other.value();
+    
+    int *elem = new int;
+    *elem = other.value;
 }
 
 hash_list &hash_list::operator=(const hash_list &other)
@@ -17,9 +19,10 @@ hash_list &hash_list::operator=(const hash_list &other)
     if(this == other){
         return *this;
     }
-    delete elem;
-    elem = new int;
-    *elem=other.value();
+    //delete elem;
+    
+    int *elem = new int;
+    *elem=other.value;
     return *this;
 }
 
