@@ -1,56 +1,65 @@
 #include "hash_list.h"
 
-hash_list::hash_list() {}
-node* _insnode(int key, float value);
+node *_insnode(int key, float value);
 
+// Constructor
+hash_list::hash_list()
+{
+    size = 0;
+    head = NULL;
+    iter_ptr = NULL;
+    
+}
+
+// Copy Constructor
 hash_list::hash_list(const hash_list &other)
 {
-    size = 0;
-    head = NULL;
-    
-    int *elem = new int;
-    *elem = other;
-}
+     //head = other.head;
+     size = 0;
+     head = NULL;
+     iter_ptr = NULL;
+     //size = other.size;
+     //iter_ptr = other.iter_ptr;
 
-hash_list::~hash_list()
-{
-    node* current;
-
-    while (head != NULL)
-    {
-        current = head;
-        //std::cout << current->key << std::endl;
-        head = head->next;
-        delete current;
-    }
+     //recreate new linked_list
+     node* cnode = other.head;
     
-    //// std::cout << "(DESTRUCTOR)  Destruct Finished" << std::endl;
+     while(cnode != NULL)
+     {
+        insert(cnode->key, cnode->value);
+        cnode = cnode->next;
+     }
     
 }
 
+// Assignment operator
 hash_list &hash_list::operator=(const hash_list &other)
 {
-    size = 0;
-    head = NULL;
-    if(this == other){
+    
+    if(head == other.head){
         return *this;
     }
-    //delete elem;
     
-    int *elem = new int;
-    *elem=other.value;
+    hash_list Tempobject = hash_list(other);
+    node *ptr = NULL;
+    ptr = this -> head;
+    this -> head = Tempobject.head;
+    this -> size = Tempobject.size;
+    Tempobject.head= ptr;
     return *this;
+   
 }
 
+// Insert Node Function
 void hash_list::insert(int key, float value)
 {
     // Find the head node, set current to head
-    node* current = head;
-    node* previousNode = head;
+    node *current = head;
+    node *previousNode = head;
     bool hasWritten = false;
 
-    //Check if first, update head if is
-    if(current == NULL)
+    // Check if first, update head if is
+    if (current == NULL)
     {
         //// std::cout << "(INSERT) head is null, writing here" << std::endl;
         current = _insnode(key, value);
@@ -62,7 +71,7 @@ void hash_list::insert(int key, float value)
     // Traverse list
     while (current != NULL)
     {
-        
+
         // If you find a key that matches, update value and bool
         if (current->key == key)
         {
@@ -70,12 +79,11 @@ void hash_list::insert(int key, float value)
             current->value = value;
             hasWritten = true;
         }
-        if(current != NULL)
+        if (current != NULL)
         {
             previousNode = current;
         }
         current = current->next;
-        
     }
 
     // If no values have been updated (new key), make a new node and append to end
@@ -86,26 +94,28 @@ void hash_list::insert(int key, float value)
         previousNode->next = current;
         size += 1;
     }
-    
+
     return;
 }
 
-std::optional<float> hash_list::get_value(int key) const{
-        node* current = head;
-while(current != NULL)
+// Get Value Function
+std::optional<float> hash_list::get_value(int key) const
 {
-    //finds
-    if(current->key == key)
+    node *current = head;
+    while (current != NULL)
     {
-        // std::cout << "(GETVALUE) Value: " << current->value << std::endl;
-return current->value;
+        // finds
+        if (current->key == key)
+        {
+            // std::cout << "(GETVALUE) Value: " << current->value << std::endl;
+            return current->value;
+        }
+        current = current->next;
     }
-    current = current->next;
-}
-// std::cout << "(GETVALUE) Did not Find" << std::endl;
+    // std::cout << "(GETVALUE) Did not Find" << std::endl;
     return {};
-    }
-node* _insnode(int key, float value)
+}
+node *_insnode(int key, float value)
 {
     // create node
     node *newNode = new (node);
@@ -115,58 +125,68 @@ node* _insnode(int key, float value)
     return newNode;
 }
 
+bool hash_list::remove(int key)
+{
+    node *current = head;
+    node *prev = head;
 
-bool hash_list::remove(int key){
-    node* current = head;
-    node* prev = head;
-
-    if(head != NULL && (head->key == key))
+    if (head != NULL && (head->key == key))
     {
-        node* temp = head;
+        node *temp = head;
         head = head->next;
         delete temp;
         // std::cout << "(REMOVE) Did remove Head: "<< "Key: " << key  << std::endl;
         size -= 1;
         return true;
-
     }
 
-    while(current != NULL)
+    while (current != NULL)
     {
-        if(current == NULL)
+        if (current == NULL)
         {
-            //DID NOT FIND TO REMOVE
-            // std::cout << "(REMOVE) Did Not Find: "<< "Key: " << key  << std::endl;
+            // DID NOT FIND TO REMOVE
+            //  std::cout << "(REMOVE) Did Not Find: "<< "Key: " << key  << std::endl;
             return false;
         }
 
-        if(current->key == key)
+        if (current->key == key)
         {
             prev->next = current->next;
-            //free current
+            // free current
             delete current;
             // std::cout << "(REMOVE) Did Find: "<< "Key: " << key  << std::endl;
             size -= 1;
             return true;
-
         }
 
         prev = current;
         current = current->next;
     }
-// std::cout << "(REMOVE) Did Not Find: "<< "Key: " << key  << std::endl;
+    // std::cout << "(REMOVE) Did Not Find: "<< "Key: " << key  << std::endl;
     return false;
 }
- 
 
 size_t hash_list::get_size() const
 {
-    //std::cout << size << std::endl;
+    // std::cout << size << std::endl;
     return size;
 }
 
+hash_list::~hash_list()
+{
+    node *current;
 
-  
+    while (head != NULL)
+    {
+        current = head;
+        // std::cout << current->key << std::endl;
+        head = head->next;
+        delete current;
+    }
+
+    //// std::cout << "(DESTRUCTOR)  Destruct Finished" << std::endl;
+}
+
 /** Dont modify this function for this lab. Leave it as is */
 void hash_list::reset_iter() {}
 
@@ -178,4 +198,3 @@ std::optional<std::pair<int *, float *>> hash_list::get_iter_value() {}
 
 /** Dont modify this function for this lab. Leave it as is */
 bool hash_list::iter_at_end() {}
-
