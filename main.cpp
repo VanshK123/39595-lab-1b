@@ -2,6 +2,26 @@
 
 #include "hash_list.h"
 
+/** Ignore this function until part C of lab 1 */
+void iterator_example(hash_list &list)
+{
+    /** We have to reset the iterator before we use it */
+    list.reset_iter();
+
+    /** We want to iterate over all nodes, so keep iterating until we're at the end */
+    while (!list.iter_at_end())
+    {
+        /** Get pointers to key/value pairs */
+        std::optional<std::pair<int *, float *>> node_values = list.get_iter_value();
+
+        /** Increment the VALUE. Note that the key remains unchanged */
+        node_values.value().second++;
+
+        /** Go to the next element */
+        list.increment_iter();
+    }
+}
+
 int main(int argc, char *argv[])
 {
     hash_list list;
