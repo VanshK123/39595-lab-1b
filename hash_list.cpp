@@ -188,13 +188,34 @@ hash_list::~hash_list()
 }
 
 /** Dont modify this function for this lab. Leave it as is */
-void hash_list::reset_iter() {}
+void hash_list::reset_iter() {
+    if(head == NULL){
+        iter_ptr = NULL;
+    }
+    iter_ptr = head;
+    return;
+}
 
 /** Dont modify this function for this lab. Leave it as is */
-void hash_list::increment_iter() {}
+void hash_list::increment_iter() {
+    if(iter_ptr == NULL){
+        return;
+    }
+    if(iter_ptr->next == NULL){
+        iter_ptr = NULL;
+    }
+    iter_ptr = iter_ptr->next;
+}
 
 /** Dont modify this function for this lab. Leave it as is */
-std::optional<std::pair<int *, float *>> hash_list::get_iter_value() {}
+std::optional<std::pair<int *, float *>> hash_list::get_iter_value() {
+
+}
 
 /** Dont modify this function for this lab. Leave it as is */
-bool hash_list::iter_at_end() {}
+bool hash_list::iter_at_end() {
+    if(iter_ptr == NULL){
+        return true;
+    }
+    return false;
+}
