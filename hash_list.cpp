@@ -1,5 +1,8 @@
 #include "hash_list.h"
 
+#include<bits/stdc++.h>
+using namespace std;
+
 node *_insnode(int key, float value);
 
 // Constructor
@@ -197,19 +200,32 @@ void hash_list::reset_iter() {
 }
 
 /** Dont modify this function for this lab. Leave it as is */
+/**
+     * Moves the iterator to the next element. If the iterator points to the last element
+     * of the list when this is called the iterator is set to NULL. If the iterator is NULL
+     * when this function is called then this function does nothing
+     */
 void hash_list::increment_iter() {
     if(iter_ptr == NULL){
         return;
     }
     if(iter_ptr->next == NULL){
         iter_ptr = NULL;
+        return;
     }
     iter_ptr = iter_ptr->next;
 }
 
 /** Dont modify this function for this lab. Leave it as is */
 std::optional<std::pair<int *, float *>> hash_list::get_iter_value() {
+    if(iter_ptr == NULL)
+    {
+        return {};
+    }
+    int* ptrkey = &(iter_ptr->key);
+    float* ptrvalue = &(iter_ptr->value);
 
+    return std::make_pair(ptrkey, ptrvalue);
 }
 
 /** Dont modify this function for this lab. Leave it as is */
